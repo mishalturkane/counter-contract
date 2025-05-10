@@ -5,18 +5,24 @@ import { expect } from "chai";
 describe("counter-contract", () => {
   // Configure the client to use the local cluster.
     const provider = anchor.AnchorProvider.env();
-  anchor.setProvider(provider);
+   anchor.setProvider(provider);
 
   const program = anchor.workspace.counterContract as Program<CounterContract>;
-  const counter = anchor.web3.Keypair.generate();
+
+   const [counterPda, _bump] = anchor.web3.PublicKey.findProgramAddressSync(
+    [Buffer.from("counter"), provider.publicKey.toBuffer()],
+    program.programId
+  );
+
+ 
   it("Is initialized! ✅", async () => {
     const tx = await program.methods
       .initialize()
-      .accounts({ counter: counter.publicKey })
-      .signers([counter])
+      .accounts({ user:provider.wallet.publicKey,counter: counterPda })
+     
       .rpc();
    
-    const account = await program.account.counter.fetch(counter.publicKey);
+    const account = await program.account.counter.fetch(counterPda);
     expect(account.count.toNumber()).to.equal(0);
 
     console.log("\nYour transaction signature", tx);
@@ -28,10 +34,10 @@ describe("counter-contract", () => {
   it("Incremented the count ✅", async () => {
     const tx = await program.methods
       .increment()
-      .accounts({ counter: counter.publicKey, user: provider.wallet.publicKey })
+      .accounts({ counter: counterPda, user: provider.wallet.publicKey })
       .rpc();
    
-    const account = await program.account.counter.fetch(counter.publicKey);
+    const account = await program.account.counter.fetch(counterPda);
     expect(account.count.toNumber()).to.equal(1);
   
     console.log("\nYour transaction signature", tx);
@@ -43,10 +49,10 @@ describe("counter-contract", () => {
   it("Decrement the count ✅", async () => {
     const tx = await program.methods
       .decrement()
-      .accounts({ counter: counter.publicKey, user: provider.wallet.publicKey })
+      .accounts({ counter: counterPda, user: provider.wallet.publicKey })
       .rpc();
    
-    const account = await program.account.counter.fetch(counter.publicKey);
+    const account = await program.account.counter.fetch(counterPda);
     expect(account.count.toNumber()).to.equal(0);
     console.log("\nYour transaction signature", tx);
     console.log("\nCounter is",account.count);

@@ -15,6 +15,8 @@ pub struct Initialize<'info> {
         init,
         payer = user,
         space = Counter::INIT_SPACE,
+        seeds = [b"counter", user.key().as_ref()],  // Use the user's public key as a seed for the PDA
+        bump
     )]
     pub counter: Account<'info, Counter>,
     #[account(mut)]
