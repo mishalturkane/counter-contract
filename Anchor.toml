@@ -12,7 +12,7 @@ counter_contract = "4zaSmrWTcHFrFz517UwwPhRw4f2HWr9rExXnzJ6kVBno"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "Devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
