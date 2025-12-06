@@ -1,4 +1,4 @@
-# 🧮 Solana Anchor Counter Contract
+# 🧮 Solana Anchor Counter Contract with structured files
 
 This is a simple on-chain **counter program** built on the **Solana blockchain** using the **Anchor framework**.  
 It allows users to **initialize**, **increment**, and **decrement** a counter stored in a Solana account.
